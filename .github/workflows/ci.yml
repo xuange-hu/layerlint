@@ -48,6 +48,9 @@ jobs:
           layerlint explain LYR502
 
       - name: Demo end to end
+        # `shell: bash` is not cosmetic: windows-latest defaults to pwsh, where
+        # `if cmd; then` is a ParserError ("Missing '(' after 'if' in if statement").
+        shell: bash
         run: |
           layerlint demo demo-workspace
           if layerlint scan demo-workspace --fail-on critical; then
@@ -57,6 +60,7 @@ jobs:
           echo "gate correctly blocked the demo Dockerfile"
 
       - name: A clean Dockerfile passes the gate
+        shell: bash
         run: |
           mkdir -p clean
           printf 'FROM alpine@sha256:%s\nUSER app\nWORKDIR /app\nLABEL org.opencontainers.image.source=x\nHEALTHCHECK NONE\nCMD ["app"]\n' "$(python -c 'print("a"*64)')" > clean/Dockerfile
