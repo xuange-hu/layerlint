@@ -1,7 +1,7 @@
 # layerlint
 
 [![CI](https://github.com/xuange-hu/layerlint/actions/workflows/ci.yml/badge.svg)](https://github.com/xuange-hu/layerlint/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-126%20passing-brightgreen.svg)](tests/)
+[![tests](https://img.shields.io/badge/tests-128%20passing-brightgreen.svg)](tests/)
 [![rules](https://img.shields.io/badge/rules-32-red.svg)](#rule-map)
 [![python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 [![dependencies](https://img.shields.io/badge/dependencies-zero-brightgreen)](pyproject.toml)
