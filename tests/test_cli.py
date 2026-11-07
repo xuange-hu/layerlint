@@ -152,3 +152,33 @@ def test_version_flag(capsys):
     with pytest.raises(SystemExit) as exc:
         main(["--version"])
     assert exc.value.code == 0
+
+
+def test_fail_on_none_never_fails_even_with_findings(dockerfile, capsys):
+    """'none' is the family-wide 'just render it' switch. It used to raise an
+    uncaught ValueError from parse_severity() after the report was printed."""
+    path = dockerfile(DIRTY)
+    assert main(["scan", path, "--fail-on", "none"]) == 0
+    out = capsys.readouterr().out
+    assert "LYR301" in out  # the report is still rendered
+    assert "Traceback" not in out
+
+
+@pytest.mark.parametrize("bad", ["hihg", "critical-plus", "HIGH?"])
+def test_invalid_fail_on_is_a_usage_error(dockerfile, capsys, bad):
+    path = dockerfile(CLEAN)
+    assert main(["scan", path, "--fail-on", bad]) == 2
+    err = capsys.readouterr().err
+    assert "unknown severity" in err
+    assert "Traceback" not in err
+
+
+def test_fail_on_high_still_gates(dockerfile, capsys):
+    path = dockerfile(DIRTY)
+    assert main(["scan", path, "--fail-on", "high"]) == 1
+
+
+def test_fail_on_none_accepts_uppercase(dockerfile, capsys):
+    path = dockerfile(DIRTY)
+    assert main(["scan", path, "--fail-on", "NONE"]) == 0
+    assert "LYR301" in capsys.readouterr().out

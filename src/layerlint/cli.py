@@ -65,7 +65,9 @@ def build_parser() -> argparse.ArgumentParser:
     scan = sub.add_parser("scan", help="audit a Dockerfile or a directory")
     scan.add_argument("path", nargs="?", default=".", help="Dockerfile or directory (default: .)")
     scan.add_argument("--min-severity", default="info", help="lowest severity to report")
-    scan.add_argument("--fail-on", default="", help="exit 1 when a finding at or above this severity exists")
+    scan.add_argument("--fail-on", default="", metavar="SEVERITY",
+                      help="exit 1 when a finding at or above this severity "
+                           "exists; 'none' never fails (default: off)")
     scan.add_argument("--json", action="store_true", help="machine-readable report")
     scan.add_argument("--sarif", metavar="FILE", help="write SARIF 2.1.0 ('-' for stdout)")
     scan.add_argument("--ignore-rule", action="append", default=[], metavar="ID", help="suppress a rule id")
@@ -124,7 +126,9 @@ def _cmd_scan(args) -> int:
     if not args.json and args.sarif != "-":
         print(render_report(report, min_severity=args.min_severity), end="")
 
-    if args.fail_on:
+    # "none" means "render the report but never fail" — the family-wide
+    # convention for shape checks that only inspect the output.
+    if args.fail_on and args.fail_on.lower() != "none":
         from .model import at_least
 
         keep = set(at_least(args.fail_on))
@@ -190,6 +194,12 @@ def main(argv: list[str] | None = None) -> int:
         severity = getattr(args, "min_severity", None)
         if severity:
             parse_severity(severity)
+        # Validate the gate up front. Without this, a typo like `--fail-on hihg`
+        # produced an uncaught ValueError traceback *after* printing the whole
+        # report — the worst possible failure mode for a CI gate.
+        gate = getattr(args, "fail_on", None)
+        if gate and gate.lower() != "none":
+            parse_severity(gate)
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
