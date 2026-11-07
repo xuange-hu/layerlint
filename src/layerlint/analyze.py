@@ -173,9 +173,8 @@ def _check_instruction(df: Dockerfile, i: Instruction, emit: Callable[..., None]
         command = "" if i.json_form else args
         _check_run(i, command, emit)
 
-    elif i.directive in ("ENTRYPOINT", "CMD"):
-        if not i.json_form:
-            emit("LYR601", i.line, f"{i.directive} uses shell form, so PID 1 is a shell and SIGTERM is not forwarded.")
+    elif i.directive in ("ENTRYPOINT", "CMD") and not i.json_form:
+        emit("LYR601", i.line, f"{i.directive} uses shell form, so PID 1 is a shell and SIGTERM is not forwarded.")
 
 
 def _check_run(i: Instruction, command: str, emit: Callable[..., None]) -> None:
