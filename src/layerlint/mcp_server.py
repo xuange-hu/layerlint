@@ -1,4 +1,4 @@
-"""MCP server — four tools, lazily imported so the CLI stays dependency-free.
+"""MCP server — five tools, lazily imported so the CLI stays dependency-free.
 
 The `mcp` package lives in an optional extra. Importing it at module scope would
 break `pip install layerlint` for everyone who only wants the CLI, which is the
@@ -57,6 +57,20 @@ TOOLS: list[dict[str, Any]] = [
         "description": "List every rule id with its severity and title.",
         "inputSchema": {"type": "object", "properties": {}},
     },
+    {
+        "name": "layerlint_demo",
+        "description": (
+            "Write a deliberately bad Dockerfile to a temp directory and audit it - "
+            "one call that proves the scanner works without touching your project."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "path": {"type": "string", "description": "Target directory (default: a temp dir)"},
+            },
+            "required": [],
+        },
+    },
 ]
 
 
@@ -97,11 +111,28 @@ def _rules_impl(_arguments: dict[str, Any]) -> str:
     return render_rules()
 
 
+def _demo_impl(arguments: dict[str, Any]) -> str:
+    import os
+    import tempfile
+
+    from .analyze import analyze
+    from .demo import write_demo
+    from .parse import parse_dockerfile
+    from .render import render_report
+
+    root = arguments.get("path") or os.path.join(tempfile.gettempdir(), "layerlint-demo-mcp")
+    target = write_demo(root, force=True)
+    df = parse_dockerfile(str(target))
+    report = analyze(df)
+    return f"wrote {target}\n" + render_report(report, min_severity="info")
+
+
 _IMPL = {
     "layerlint_scan": _scan_impl,
     "layerlint_layers": _layers_impl,
     "layerlint_explain": _explain_impl,
     "layerlint_rules": _rules_impl,
+    "layerlint_demo": _demo_impl,
 }
 
 

@@ -47,7 +47,7 @@ layerlint scan . --fail-on high --sarif layerlint.sarif
 | **层图建模** | stage → layer 两层结构，能判断「删了但没删掉」 |
 | **32 规则** | 安全 + 构建质量，分级 critical / high / medium / low / info |
 | **证据式输出** | 结论带行号与命中的原始指令，可复核 |
-| **MCP 4 工具** | `uvx --from "layerlint[mcp]" layerlint-mcp` |
+| **MCP 5 工具** | `uvx --from "layerlint[mcp]" layerlint-mcp` |
 | **CI 一等公民** | `--fail-on` 退出码 + SARIF 2.1.0 |
 
 ## 命令

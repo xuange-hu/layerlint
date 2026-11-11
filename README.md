@@ -3,7 +3,7 @@
 [中文说明 / Chinese README](README_CN.md)
 
 [![CI](https://github.com/xuange-hu/layerlint/actions/workflows/ci.yml/badge.svg)](https://github.com/xuange-hu/layerlint/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-136%20passing-brightgreen.svg)](tests/)
+[![tests](https://img.shields.io/badge/tests-137%20passing-brightgreen.svg)](tests/)
 [![rules](https://img.shields.io/badge/rules-32-red.svg)](#rule-map)
 [![python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 [![dependencies](https://img.shields.io/badge/dependencies-zero-brightgreen)](pyproject.toml)
@@ -116,7 +116,7 @@ layerlint layers Dockerfile
 | 层建模 | ✗ | ✗ | **✓ stage/layer DAG + 跨层删除检测** |
 | 扩展方式 | 重新编译 | 重新编译 | **Python 规则字典，改一行就是一条规则** |
 | CI 集成 | shell 管道 | shell 管道 | **原生 SARIF + 退出码** |
-| Agent 集成 | ✗ | ✗ | **MCP server（4 tools）** |
+| Agent 集成 | ✗ | ✗ | **MCP server（5 tools）** |
 | 离线、确定性 | ✓ | ✓ | ✓ |
 
 不是替代品，是补位：hadolint 查 shell 写法，layerlint 查**镜像里到底留下了什么**。
