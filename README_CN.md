@@ -5,6 +5,14 @@
 **一句话**：`RUN rm -rf /root/.cache` 删不掉**前一层**里的缓存。只看指令清单的工具
 会以为删掉了，layerlint 不会。
 
+## 目录
+
+- [为什么存在](#为什么存在)
+- [三步跑通](#三步跑通)
+- [差异化](#差异化)
+- [命令](#命令)
+- [已知边界](#已知边界)
+
 ## 为什么存在
 
 [hadolint](https://github.com/hadolint/hadolint)（约 12.5k★）逐条检查 Dockerfile
