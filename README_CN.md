@@ -1,5 +1,10 @@
 # layerlint · 中文说明
 
+[![tests](https://img.shields.io/badge/tests-137-brightgreen)](https://github.com/xuange-hu/layerlint/actions)
+[![python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
+[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![deps](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)](https://github.com/xuange-hu/layerlint/blob/main/pyproject.toml)
+
 [English README](README.md) · 建模 `stage → layer` 的 Dockerfile 审计器。
 
 **一句话**：`RUN rm -rf /root/.cache` 删不掉**前一层**里的缓存。只看指令清单的工具
